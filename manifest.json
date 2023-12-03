@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "krnsk0_user_testing_form_filler",
+  "version": "0.0.1",
+  "action": { "default_popup": "src/popup/index.html" },
+  "content_scripts": [
+    {
+      "js": ["src/scripts/content-script.ts"],
+      "matches": ["https://app.dataannotation.tech/workers/tasks/*"]
+    }
+  ],
+
+  "permissions": ["storage"]
+}
