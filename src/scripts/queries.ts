@@ -3,6 +3,9 @@ import {
   querySelectorDeep,
 } from 'query-selector-shadow-dom';
 
+/**
+ * Retrieve DOM elements for all questions
+ */
 export function getAllQuestions() {
   const questions = document.querySelectorAll<HTMLElement>(
     'available-tests-list-item'
@@ -11,17 +14,23 @@ export function getAllQuestions() {
   return questions;
 }
 
+/**
+ * Get the parent element of all questions
+ */
 export function getQuestionParent() {
   const parent = document.querySelector<HTMLElement>('available-tests-list');
   if (!parent) throw new Error('No question parent found');
   return parent;
 }
 
-export function getQuestionReward(question: HTMLElement) {
+/**
+ * Get the reward for a question if there is one; otherwise 0
+ */
+export function getQuestionReward(question: HTMLElement): number {
   // querySelectorAllDeep fails with the classname
   // so we search in JS
   const spans = querySelectorAllDeep('span', question);
-  if (!spans) throw new Error('No spans found');
+  if (!spans.length) return 0;
   const reward = spans.find((node) => {
     return node.classList.contains('compensation-amount__text');
   });
@@ -37,6 +46,9 @@ interface SurveyQuestionContent {
   }[];
 }
 
+/**
+ * Scrape the question content and return in a data structure
+ */
 export function getSurveyQuestionContent(
   question: HTMLElement
 ): SurveyQuestionContent {
@@ -68,19 +80,26 @@ export function getSurveyQuestionContent(
   };
 }
 
-type QuestionTypes = 'desktop' | 'mobile';
-
-export function getQuestionType(question: HTMLElement): QuestionTypes {
-  const badges = querySelectorAllDeep('tk-badge', question);
-  const firstBadge = badges[0];
-  if (!firstBadge) throw new Error('No badges found');
-  const badgeText = firstBadge.innerText;
-  return badgeText.includes('Mac or Windows computer') ? 'desktop' : 'mobile';
+interface QuestionInfo {
+  device: 'desktop' | 'mobile';
+  live: boolean;
 }
 
-export function clickScreenerButton(question: HTMLElement) {
-  const button = querySelectorDeep('button', question);
-  if (!button) throw new Error('No button found');
-  console.log('button', button);
-  // button.click();
+/**
+ * Is this a desktop or mobile test?
+ */
+export function getQuestionInfo(question: HTMLElement): QuestionInfo {
+  const badges = querySelectorAllDeep('tk-badge', question);
+  const deviceBadge = badges[0];
+  if (!deviceBadge) throw new Error('No device badge found');
+  const badgeText = deviceBadge.innerText;
+  const maybeLiveConvoBadge = badges.find((badge) => {
+    return badge.innerText.includes('Live Conversation');
+  });
+  return {
+    device: badgeText.includes('Mac or Windows computer')
+      ? 'desktop'
+      : 'mobile',
+    live: !!maybeLiveConvoBadge,
+  };
 }
