@@ -1,8 +1,11 @@
 import { action, observable } from 'mobx';
-import { Model, model } from 'mobx-keystone';
+import { Model, model, tProp, types } from 'mobx-keystone';
 
 @model('Root')
-export class Root extends Model({}) {
+export class Root extends Model({
+  sortQuestions: tProp(types.boolean, () => true).withSetter(),
+  hideShortTests: tProp(types.boolean, () => false).withSetter(),
+}) {
   /**
    * This property intentionally not serialized
    */

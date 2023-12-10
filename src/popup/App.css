@@ -1,0 +1,8 @@
+.checkboxes {
+  user-select: none;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  margin: 1em;
+  font-size: 18px;
+}
