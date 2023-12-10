@@ -13,11 +13,20 @@ function sortSpecificChildrenByComparator(
   comparator: (a: HTMLElement, b: HTMLElement) => number
 ): void {
   const childrenArray = Array.from(childrenToSort);
+  const childrenCopy = [...childrenArray]; // Create a copy for comparison
   childrenArray.sort(comparator);
 
-  // Remove only the specified children to preserve others
-  childrenToSort.forEach((child) => parentElement.removeChild(child));
-  childrenArray.forEach((child) => parentElement.appendChild(child));
+  // Check if any changes occurred during sorting
+  const itemsChanged = childrenArray.some(
+    (item, index) => item !== childrenCopy[index]
+  );
+
+  if (itemsChanged) {
+    // Remove only the specified children to preserve others
+    childrenToSort.forEach((child) => parentElement.removeChild(child));
+    childrenArray.forEach((child) => parentElement.appendChild(child));
+    logger.log('sorted questions'); // Log only if changes made
+  }
 }
 
 export function sortQuestions() {
@@ -32,5 +41,4 @@ export function sortQuestions() {
     }
   );
   window.scrollTo(0, scrollPosition);
-  logger.log('sorted questions');
 }
