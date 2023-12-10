@@ -29,7 +29,7 @@ export function getQuestionReward(question: HTMLElement) {
   return parseInt(reward.innerText.replace('$', ''), 10);
 }
 
-interface QuestionContent {
+interface SurveyQuestionContent {
   questionText: string;
   choices: {
     text: string;
@@ -37,7 +37,9 @@ interface QuestionContent {
   }[];
 }
 
-export function getQuestionContent(question: HTMLElement): QuestionContent {
+export function getSurveyQuestionContent(
+  question: HTMLElement
+): SurveyQuestionContent {
   const legend = querySelectorDeep('legend', question);
   if (!legend) throw new Error('No legend found');
   const labelWrappers = querySelectorAllDeep('.label-wrapper', question);
@@ -64,4 +66,21 @@ export function getQuestionContent(question: HTMLElement): QuestionContent {
     questionText: legend.innerText,
     choices,
   };
+}
+
+type QuestionTypes = 'desktop' | 'mobile';
+
+export function getQuestionType(question: HTMLElement): QuestionTypes {
+  const badges = querySelectorAllDeep('tk-badge', question);
+  const firstBadge = badges[0];
+  if (!firstBadge) throw new Error('No badges found');
+  const badgeText = firstBadge.innerText;
+  return badgeText.includes('Mac or Windows computer') ? 'desktop' : 'mobile';
+}
+
+export function clickScreenerButton(question: HTMLElement) {
+  const button = querySelectorDeep('button', question);
+  if (!button) throw new Error('No button found');
+  console.log('button', button);
+  // button.click();
 }

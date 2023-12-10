@@ -2,8 +2,10 @@ import { createStore } from '../common/store/createRootStore';
 import { startStoreSync } from '../common/store/startStoreSync';
 import { makeLogger } from '../common/utils/makeLogger';
 import { appendMenu } from './appendMenu';
-import { getAllQuestions, getQuestionContent } from './queries';
+import { debug } from './debug';
+import { hideMobile } from './hideMobile';
 import { sortQuestions } from './sortQuestions';
+import { waitForQuestions } from './waitForQuestions';
 
 const logger = makeLogger('content-script');
 logger.log('starting content script');
@@ -13,23 +15,20 @@ logger.log('starting content script');
   await startStoreSync(store);
   store.markLoadComplete();
 
+  await waitForQuestions();
+
   appendMenu([
     {
       buttonText: 'sort',
       callback: sortQuestions,
     },
     {
-      buttonText: 'test',
-      callback: () => {
-        const questions = getAllQuestions();
-        const content = getQuestionContent(questions[0]);
-        console.log('CONTENT: ', content);
-      },
+      buttonText: 'hide mobile',
+      callback: hideMobile,
+    },
+    {
+      buttonText: 'debug',
+      callback: debug,
     },
   ]);
 })();
-
-/**
- * TODO:
- * - function to wait until questions appear
- */
