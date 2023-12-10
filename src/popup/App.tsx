@@ -30,16 +30,18 @@ const App = observer(() => {
             checked={store.hideMobileTests}
             onChange={() => store.setHideMobileTests(!store.hideMobileTests)}
           />
-          Hide Short Tests
+          Hide Mobile Tests
         </label>
         <label>
           <input
             type="checkbox"
             id="hideShortTests"
-            checked={store.hideShortTests}
-            onChange={() => store.setHideShortTests(!store.hideShortTests)}
+            checked={store.declineShortTests}
+            onChange={() =>
+              store.setDeclineShortTests(!store.declineShortTests)
+            }
           />
-          Hide Short Tests
+          Decline short/$4 tests
         </label>
       </div>
     </div>

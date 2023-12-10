@@ -21,6 +21,7 @@ function sortSpecificChildrenByComparator(
 }
 
 export function sortQuestions() {
+  const scrollPosition = window.scrollY;
   sortSpecificChildrenByComparator(
     getQuestionParent(),
     getAllQuestions(),
@@ -30,5 +31,6 @@ export function sortQuestions() {
       return bReward - aReward;
     }
   );
+  window.scrollTo(0, scrollPosition);
   logger.log('sorted questions');
 }

@@ -1,8 +1,10 @@
+import { autorun } from 'mobx';
+
 import { createStore } from '../common/store/createRootStore';
 import { startStoreSync } from '../common/store/startStoreSync';
 import { makeLogger } from '../common/utils/makeLogger';
 import { hideMobileTests } from './hideMobileTests';
-import { observeQuestionList } from './observeQuestionList';
+import { hideShortTests } from './hideShortTests';
 import { sortQuestions } from './sortQuestions';
 import { waitForQuestionParent } from './waitForQuestionParent';
 
@@ -19,16 +21,16 @@ logger.log('starting content script');
     if (store.sortQuestions) {
       sortQuestions();
     }
-    if (store.hideShortTests) {
-      // TODO
-      // hideShortTests();
+    if (store.declineShortTests) {
+      hideShortTests();
     }
     if (store.hideMobileTests) {
       hideMobileTests();
     }
   };
 
-  observeQuestionList(onChanges);
+  autorun(onChanges);
+  setInterval(onChanges, 200);
 })();
 
 /**
@@ -39,5 +41,7 @@ logger.log('starting content script');
  * - reversible sort
  * - run code on mutation of the parent
  * - pull out scenario for live
+ * - restore scroll position after sort
+ * -
  *
  */

@@ -5,7 +5,7 @@ import { Model, model, tProp, types } from 'mobx-keystone';
 export class Root extends Model({
   sortQuestions: tProp(types.boolean, () => true).withSetter(),
   hideMobileTests: tProp(types.boolean, () => true).withSetter(),
-  hideShortTests: tProp(types.boolean, () => false).withSetter(),
+  declineShortTests: tProp(types.boolean, () => false).withSetter(),
 }) {
   /**
    * This property intentionally not serialized
