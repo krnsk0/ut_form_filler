@@ -24,9 +24,7 @@ logger.log('starting content script');
     if (store.declineShortTests) {
       hideShortTests();
     }
-    if (store.hideMobileTests) {
-      hideMobileTests();
-    }
+    hideMobileTests(store.hideMobileTests);
   };
 
   autorun(onChanges);

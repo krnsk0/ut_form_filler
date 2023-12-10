@@ -4,11 +4,16 @@ export function hideQuestion(question: HTMLElement) {
   question.style.display = 'none';
 }
 
-export function hideMobileTests() {
+export function showQuestion(question: HTMLElement) {
+  question.style.display = 'inherit';
+}
+
+export function hideMobileTests(hide: boolean) {
   const questions = getAllQuestions();
   questions.forEach((question) => {
     if (getQuestionInfo(question).device === 'mobile') {
-      hideQuestion(question);
+      if (hide) hideQuestion(question);
+      else showQuestion(question);
     }
   });
 }
