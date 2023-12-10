@@ -7,38 +7,34 @@ import {
 
 const logger = makeLogger('sortQuestions');
 
-function sortSpecificChildrenByComparator(
+function sortChildrenInPlace(
   parentElement: HTMLElement,
   childrenToSort: NodeListOf<HTMLElement>,
   comparator: (a: HTMLElement, b: HTMLElement) => number
-): void {
-  const childrenArray = Array.from(childrenToSort);
-  const childrenCopy = [...childrenArray]; // Create a copy for comparison
-  childrenArray.sort(comparator);
-
-  // Check if any changes occurred during sorting
-  const itemsChanged = childrenArray.some(
-    (item, index) => item !== childrenCopy[index]
-  );
-
-  if (itemsChanged) {
-    // Remove only the specified children to preserve others
-    childrenToSort.forEach((child) => parentElement.removeChild(child));
-    childrenArray.forEach((child) => parentElement.appendChild(child));
-    logger.log('sorted questions'); // Log only if changes made
+): boolean {
+  let changed = false;
+  for (let i = 0; i < childrenToSort.length - 1; i++) {
+    for (let j = i + 1; j < childrenToSort.length; j++) {
+      const a = childrenToSort[i];
+      const b = childrenToSort[j];
+      if (comparator(a, b) > 0) {
+        parentElement.insertBefore(a, b); // Move a before b
+        changed = true;
+      }
+    }
   }
+  return changed;
 }
 
 export function sortQuestions() {
-  const scrollPosition = window.scrollY;
-  sortSpecificChildrenByComparator(
-    getQuestionParent(),
-    getAllQuestions(),
-    (a, b) => {
-      const aReward = getQuestionReward(a);
-      const bReward = getQuestionReward(b);
-      return bReward - aReward;
-    }
-  );
-  window.scrollTo(0, scrollPosition);
+  const parent = getQuestionParent();
+  const questions = getAllQuestions();
+
+  const changed = sortChildrenInPlace(parent, questions, (a, b) => {
+    const aReward = getQuestionReward(a);
+    const bReward = getQuestionReward(b);
+    return bReward - aReward;
+  });
+
+  if (changed) logger.log('sorted questions in place');
 }
