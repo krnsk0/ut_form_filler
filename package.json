@@ -12,6 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/query-selector-shadow-dom": "^1.0.4",
     "mobx": "^6.10.2",
     "mobx-keystone": "^1.6.5",
     "mobx-react-lite": "^4.0.4",
