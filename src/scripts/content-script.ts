@@ -1,7 +1,9 @@
 import { createStore } from '../common/store/createRootStore';
 import { startStoreSync } from '../common/store/startStoreSync';
 import { makeLogger } from '../common/utils/makeLogger';
+import { hideMobileTests } from './hideMobileTests';
 import { observeQuestionList } from './observeQuestionList';
+import { sortQuestions } from './sortQuestions';
 import { waitForQuestionParent } from './waitForQuestionParent';
 
 const logger = makeLogger('content-script');
@@ -13,7 +15,20 @@ logger.log('starting content script');
   store.markLoadComplete();
   await waitForQuestionParent();
 
-  observeQuestionList((questions) => {});
+  const onChanges = () => {
+    if (store.sortQuestions) {
+      sortQuestions();
+    }
+    if (store.hideShortTests) {
+      // TODO
+      // hideShortTests();
+    }
+    if (store.hideMobileTests) {
+      hideMobileTests();
+    }
+  };
+
+  observeQuestionList(onChanges);
 })();
 
 /**

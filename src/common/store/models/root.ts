@@ -4,6 +4,7 @@ import { Model, model, tProp, types } from 'mobx-keystone';
 @model('Root')
 export class Root extends Model({
   sortQuestions: tProp(types.boolean, () => true).withSetter(),
+  hideMobileTests: tProp(types.boolean, () => true).withSetter(),
   hideShortTests: tProp(types.boolean, () => false).withSetter(),
 }) {
   /**

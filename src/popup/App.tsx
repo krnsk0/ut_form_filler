@@ -26,6 +26,15 @@ const App = observer(() => {
         <label>
           <input
             type="checkbox"
+            id="hideMobileTests"
+            checked={store.hideMobileTests}
+            onChange={() => store.setHideMobileTests(!store.hideMobileTests)}
+          />
+          Hide Short Tests
+        </label>
+        <label>
+          <input
+            type="checkbox"
             id="hideShortTests"
             checked={store.hideShortTests}
             onChange={() => store.setHideShortTests(!store.hideShortTests)}

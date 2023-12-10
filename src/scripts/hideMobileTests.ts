@@ -4,10 +4,10 @@ export function hideQuestion(question: HTMLElement) {
   question.style.display = 'none';
 }
 
-export function hideMobile() {
+export function hideMobileTests() {
   const questions = getAllQuestions();
   questions.forEach((question) => {
-    if (getQuestionInfo(question) === 'mobile') {
+    if (getQuestionInfo(question).device === 'mobile') {
       hideQuestion(question);
     }
   });

@@ -1,8 +1,11 @@
+import { makeLogger } from '../common/utils/makeLogger';
 import {
   getAllQuestions,
   getQuestionParent,
   getQuestionReward,
 } from './queries';
+
+const logger = makeLogger('sortQuestions');
 
 function sortSpecificChildrenByComparator(
   parentElement: HTMLElement,
@@ -27,5 +30,5 @@ export function sortQuestions() {
       return bReward - aReward;
     }
   );
-  console.log('sorted!');
+  logger.log('sorted questions');
 }
