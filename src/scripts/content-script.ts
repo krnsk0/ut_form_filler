@@ -2,11 +2,11 @@ import { createStore } from '../common/store/createRootStore';
 import { startStoreSync } from '../common/store/startStoreSync';
 import { makeLogger } from '../common/utils/makeLogger';
 import { appendMenu } from './appendMenu';
-import { debug } from './debug';
 import { enhance } from './enhance';
 import { hideMobile } from './hideMobile';
 import { observeQuestionList } from './observeQuestionList';
 import { sortQuestions } from './sortQuestions';
+import { waitForQuestionParent } from './waitForQuestionParent';
 
 const logger = makeLogger('content-script');
 logger.log('starting content script');
@@ -16,27 +16,24 @@ logger.log('starting content script');
   await startStoreSync(store);
   store.markLoadComplete();
 
-  observeQuestionList(() => {
-    console.log('CHANGE DETECTED');
-    appendMenu([
-      {
-        buttonText: 'sort',
-        callback: sortQuestions,
-      },
-      {
-        buttonText: 'hide mobile',
-        callback: hideMobile,
-      },
-      {
-        buttonText: 'enhance',
-        callback: enhance,
-      },
-      {
-        buttonText: 'debug',
-        callback: debug,
-      },
-    ]);
-  });
+  await waitForQuestionParent();
+
+  appendMenu([
+    {
+      buttonText: 'sort',
+      callback: sortQuestions,
+    },
+    {
+      buttonText: 'hide mobile',
+      callback: hideMobile,
+    },
+    {
+      buttonText: 'enhance',
+      callback: enhance,
+    },
+  ]);
+
+  observeQuestionList(() => {});
 })();
 
 /**
