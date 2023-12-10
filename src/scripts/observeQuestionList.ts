@@ -24,7 +24,6 @@ export function observeQuestionList(callback: () => void) {
       subtree: true,
       childList: true,
       attributes: true,
-      characterData: true,
     });
   };
   const teardownObserver = () => observer.disconnect();
