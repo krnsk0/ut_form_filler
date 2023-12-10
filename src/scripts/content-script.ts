@@ -1,6 +1,12 @@
+import {
+  querySelectorAllDeep,
+  querySelectorDeep,
+} from 'query-selector-shadow-dom';
+
 import { createStore } from '../common/store/createRootStore';
 import { startStoreSync } from '../common/store/startStoreSync';
 import { makeLogger } from '../common/utils/makeLogger';
+import { appendMenu } from './appendMenu';
 
 const logger = makeLogger('content-script');
 logger.log('starting content script');
@@ -16,34 +22,6 @@ const findQuestion = (questionNumber: number) => {
       .replace('$', '') ?? '0',
     10
   );
-  const questionDiv: HTMLDivElement =
-    questionNode?.querySelector<HTMLDivElement>('.available-tests__tile')
-      ?.shadowRoot?.childNodes[0] as HTMLDivElement;
-  const slotDiv = questionDiv
-    ?.querySelector('slot')
-    ?.assignedNodes()[1] as HTMLDivElement;
-  const questionText = slotDiv
-    .querySelector<HTMLLegendElement>(
-      'screener-question .screener-question__title'
-    )
-    ?.innerText.trim();
-  const answers = (
-    slotDiv.querySelector('tk-single-select-list')?.shadowRoot
-      ?.childNodes[0] as HTMLDivElement
-  )?.querySelectorAll('.label-wrapper') as NodeListOf<HTMLDivElement>;
-
-  const parsedAnswers = Array.from(answers).map((answer: HTMLDivElement) => {
-    return {
-      select: () => answer.querySelector('input')?.click(),
-      answerText: answer.querySelector('label')?.innerText.trim(),
-    };
-  });
-
-  return {
-    surveyAmount,
-    questionText,
-    answers: parsedAnswers,
-  };
 };
 
 (async () => {
@@ -51,5 +29,12 @@ const findQuestion = (questionNumber: number) => {
   await startStoreSync(store);
   store.markLoadComplete();
 
-  console.log('question', findQuestion(1));
+  appendMenu([
+    {
+      buttonText: 'test',
+      callback: () => {
+        console.log('test');
+      },
+    },
+  ]);
 })();
